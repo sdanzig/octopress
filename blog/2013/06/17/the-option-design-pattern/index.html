@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The Option Design Pattern - The Programmer's Probe</title>
+  <meta name="author" content="Scott Danzig">
+
+  
+  <meta name="description" content="When starting to learn Scala, front and center was the utility of the Option design pattern. &nbsp;I think it&#8217;s useful, but at first it&#8217; &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sdanzig.github.io/blog/2013/06/17/the-option-design-pattern">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Programmer's Probe" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Programmer's Probe</a></h1>
+  
+    <h2>An exploration of open source technologies, algorithms and optimization, Scala and Java, and other programming-related curiosities</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sdanzig.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">The Option Design Pattern</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-17T00:00:00-04:00" pubdate data-updated="true">Jun 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+  When starting to learn Scala, front and center was the utility of the Option design pattern. &nbsp;I think it&#8217;s useful, but at first it&#8217;s fairly unwieldy, and it&#8217;s much more useful when you know how to reasonably work with it.<br />The problem the Option pattern attempts to solve is the frequency of the NPE (null pointer exception), certainly a constant thorn in the side of every Java programmer. The problem is that you&#8217;re mixing the valid range for a value with something that is invalid, &#8220;null&#8221;. By allowing this combination, anyone who uses your provided value must be aware and provide accommodation for the possibility that this &#8220;I am invalid!&#8221; placeholder can occur. &nbsp;There are no safeguards indigenous to a language such as Java, so if you forget to handle this, your software can exhibit an error at runtime.<br />The Option pattern removes the placeholder from the range of possible values by wrapping it in an &#8220;Option&#8221; object. This object can be one of two derivative classes: Some, or None. &nbsp;If it&#8217;s a &#8220;Some&#8221; object, it has a value that&#8217;s guaranteed to be in the valid range. &nbsp;If it&#8217;s a None object, it represents the &#8220;absence of a valid value&#8221;.<br />Scala cleanly handles Option objects via pattern matching. &nbsp;For example, talkAboutValue is a simple method that takes an Option object, and displays a value if it&#8217;s something, and doesn&#8217;t attempt to display a value if it&#8217;s nothing:<br /><br /><div><script src='https://gist.github.com/5802273.js'></script>
+<noscript><pre><code></code></pre></noscript></div>
+ Scala displays a compile-time warning if None is not handled in talkAboutValue&#8217;s pattern matching, encouraging comprehensive handling of the input. The input for the talkAboutString method is not an Option, so it&#8217;s expected that the input will be a valid String. &nbsp;This allows the programmer to confidently call the length method, without worrying about an NPE. &nbsp;You can still input a null to talkAboutString, and handle the null value the Java-way (e.g. if(str==null) {&#8230; ) but Scala discourages this.<br />A very inescapable instance where Scala makes use of the Option object is with its implementation of Maps. &nbsp;When you query a value, it&#8217;s either in the map or it&#8217;s not. &nbsp;If it&#8217;s not, rather than returning a null value like you may have been accustomed to in a language like Java, Scala returns a value of None. <br /><br /><script src="https://gist.github.com/sdanzig/5802364.js"></script> Unfortunately, even for a lookup resulting in a valid value, you still have the Option object &#8220;wrapper&#8221; to deal with. &nbsp;That means you have to do not only the &#8220;get&#8221; for the lookup, but another to get the actual value. An &#8220;if(val != null)&#8221; seems much easier than doing a pattern match every time.<br />Fortunately, Scala alleviates this via facilities in its core API. The most obvious is &#8220;getOrElse&#8221;.<br /><br /><script src="https://gist.github.com/sdanzig/5802494.js"></script> This doesn&#8217;t alter the handling of the value if a lookup is unsuccessful, but it does at least provide a default value, which may be appropriate in many situations such as a default configuration setting. Another very common use case is handling a list of Options resulting from iterating over a collection:<br /><script src="https://gist.github.com/sdanzig/5802502.js"></script>It&#8217;s not so bad in this single-use instance, but if you plan on using a collection of Options repeatedly, you may wish to preprocess it, to remove the wrapper objects:<br /><br /><script src="https://gist.github.com/sdanzig/5802517.js"></script> Flatten results in a list of just the unwrapped values in the Some objects.<br /><br />Flatten is the same method that can concatenate the lists in a list to a single list. E.g. List(List(1,2),List(3,4)).flatten results in List(1,2,3,4). If you care, the way flatten is able to operate on a list of Options is because of an implicit method, option2Iterable. An option can be converted to a list of 0 or 1 elements (0 for None, 1 for Some) with its toList method. This implicit method is called by flatten, resulting in the same treatment as a list of lists:<br /><pre>implicit def option2Iterable[A](xo: Option[A]): Iterable[A] =<br />  xo.toList<br /></pre>Scala, despite its infamously steep learning curve, is beautiful in the way that its implicits provide for such ease of use for common programming tasks. Along those lines, it&#8217;s also common for one to have a list of values that must be passed to a method which results in an Option. If you only want to handle the iterations with successful results, such as values successfully retrieved from a map, there is another accommodation called &#8220;flatMap&#8221;, which replaces a sequence of flatten then map.<br /><br /><script src="https://gist.github.com/sdanzig/5802546.js"></script> You can see that the function passed to flatMap is only run on the last names that are successfully found in the map.<br /><br />Two more nifty things to know. &nbsp;If you pass a Java object to the constructor of Option, it will automatically wrap non-null values with Some() and null values are replaced by None. For instance, try going to your Scala REPL and type: <br /><pre>Option(null)</pre><br />Now try: <br /><pre>Option(3)</pre><br />And lastly, just to demonstrate how easy working with Options can be, please check out <a href="http://blog.tmorris.net/posts/scalaoption-cheat-sheet/">Tony Morris&#8217;s nifty cheat sheet</a>. &nbsp;If you notice yourself handling an Option in a certain way, there&#8217;s a very good chance Scala, or at least the scalaz library, provides you a shortcut you can replace it with:<br /><br /><strong>Conclusion</strong><br />In summary, I agree the Option pattern seems to get in the way when you&#8217;re starting out with Scala, but in the end, it results in much safer code, free from one of the most ruthlessly frequent runtime errors of our time. Scala makes it not only available, but also easy to work with, so learn to love it!</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Scott Danzig</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-17T00:00:00-04:00" pubdate data-updated="true">Jun 17<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/design-pattern/'>design pattern</a>, <a class='category' href='/blog/categories/functional-programming/'>functional Programming</a>, <a class='category' href='/blog/categories/option/'>option</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sdanzig.github.io/blog/2013/06/17/the-option-design-pattern/" data-via="" data-counturl="http://sdanzig.github.io/blog/2013/06/17/the-option-design-pattern/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/17/self-introduction/" title="Previous Post: Self Introduction">&laquo; Self Introduction</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/06/27/the-optimization-of-javas-hashmap/" title="Next Post: The Optimization of Java's HashMap class">The Optimization of Java's HashMap class &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/29/do-you-care-if-people-understand-you/">Do You Care if People Understand You?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/07/introduction-to-git-along-with-sensible/">Introduction to Git Along With a Sensible Git Workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/30/buddychat-simple-example-of-akka-actors/">BuddyChat, a Simple Example of Akka Actors With an Akka FSM</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/the-optimization-of-javas-hashmap/">The Optimization of Java's HashMap Class</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/17/the-option-design-pattern/">The Option Design Pattern</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Scott Danzig -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

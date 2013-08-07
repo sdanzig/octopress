@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: new blog | The Programmer's Probe]]></title>
+  <link href="http://sdanzig.github.io/blog/categories/new-blog/atom.xml" rel="self"/>
+  <link href="http://sdanzig.github.io/"/>
+  <updated>2013-08-07T01:44:55-04:00</updated>
+  <id>http://sdanzig.github.io/</id>
+  <author>
+    <name><![CDATA[Scott Danzig]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Self Introduction]]></title>
+    <link href="http://sdanzig.github.io/blog/2013/06/17/self-introduction/"/>
+    <updated>2013-06-17T00:00:00-04:00</updated>
+    <id>http://sdanzig.github.io/blog/2013/06/17/self-introduction</id>
+    <content type="html"><![CDATA[<div class='post'>
+Hello internet people,<br />I've been a computer programmer since my parents bought me an Apple IIc when I was 7. &nbsp;I'm 36 now, and my path in life, since then, went like this:<br /><ul><li><strong>ProDOS BASIC</strong>, for choose your own adventure games on the Apple IIc</li><li><strong>Labview for Windows</strong>, at an AT&amp;T Bell Labs internship</li><li><strong>MudOS LPC</strong>, when I ran my own MUD</li><li><strong>Java</strong>, for developing a legend of Zelda-like game for Software Engineering class</li><li><strong>Perl</strong>, for an AT&amp;T e-billing system</li><li><strong>Perl</strong>, <strong>PL/SQL</strong> and <strong>Java</strong>, for the backend functionality at Register.com</li><li><strong>J2EE</strong>, for enterprise-networking software at Avaya</li><li><strong>C</strong>, <strong>Java</strong>, <strong>Visual C++</strong>, and <strong>C#</strong>, for simulation software at CSC</li><li>Visual C++ and Java, for operational awareness software at Viecore FSD and then Future Skies</li><li><strong>Java</strong> and <strong>C</strong>, for flight simulation software at MIT Lincoln Laboratory</li><li><strong>Javascript</strong>/<strong>CSS</strong> for front end and <strong>Java</strong> with <strong>Spring</strong> for backend, transferring and accessing broadcast video at Reuters</li><li><strong>Python</strong>, <strong>Flex</strong>/<strong>Actionscript</strong>, and <strong>Java</strong>, for portfolio accounting software at Hedgeserv</li><li><strong>Scala</strong>, <strong>Java</strong>, <strong>Python</strong>, and <strong>Objective C</strong>, for web and mobile publishing at New York Magazine</li></ul>At this point in my career, I have three main interests that serve as the motivation for this blog:<br /><ul><li>I am invigorated by the recent push in the world of software development toward <strong>functional</strong>, <strong>non-blocking programming</strong>. &nbsp;In particular, I've absolutely loved learning about <strong>Scala</strong> recently, and plan to work towards greater expertise leveraging its capabilities.</li><li>I have become more attuned to the need for adherence to established <strong>design patterns</strong>, and want to better familiarize myself with them, in an effort to better exploit their capabilities given an opportunity.</li><li>It is difficult to stay abreast of all immediately-relevant <strong>open source technologies</strong>. &nbsp;For nearly any challenge that exists in programming, I've found that someone has developed some sort of solution that will at least partially alleviate its inherent difficulties.</li></ul>So, in general, that's what I'll be posting about. &nbsp;Nice to make your acquaintance, don't be a stranger, and feel free to point out anything I wrote that you think is good, bad, right, wrong, misguided or silly.<br />Thanks for reading!</div>
+
+]]></content>
+  </entry>
+  
+</feed>

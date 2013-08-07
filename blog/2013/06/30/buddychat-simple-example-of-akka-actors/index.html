@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>BuddyChat, a Simple Example of Akka Actors with an Akka FSM - The Programmer's Probe</title>
+  <meta name="author" content="Scott Danzig">
+
+  
+  <meta name="description" content=".post-body img, .post-body .tr-caption-container, .ss, .Profile img, .Image img, .BlogList .item-thumbnail img { padding: none !important; border: &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sdanzig.github.io/blog/2013/06/30/buddychat-simple-example-of-akka-actors">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="The Programmer's Probe" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">The Programmer's Probe</a></h1>
+  
+    <h2>An exploration of open source technologies, algorithms and optimization, Scala and Java, and other programming-related curiosities</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sdanzig.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">BuddyChat, a Simple Example of Akka Actors With an Akka FSM</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-30T00:00:00-04:00" pubdate data-updated="true">Jun 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class='post'>
+<style>.post-body img, .post-body .tr-caption-container, .ss, .Profile img, .Image img, .BlogList .item-thumbnail img {   padding: none !important;   border: none !important;   background: none !important;   -moz-box-shadow: 0px 0px 0px transparent !important;   -webkit-box-shadow: 0px 0px 0px transparent !important;   box-shadow: 0px 0px 0px transparent !important; } </style> I wrote a silly chat program in Scala to demonstrate functionality provided by something called &#8220;Akka&#8221;, which is available for both Scala and Java. &nbsp;It lets you easily write your program so that:<br /><br /><ul><li>Everything is asynchronous, which means that things can be run at the same time when possible. &nbsp;If two people want to say hello, let them say hi at the same time. &nbsp;Those &#8220;hello&#8221; messages will be be displayed when they arrive, in whatever order. &nbsp;Being able to run things in parallel is massively important when a computer has more than one processor, or some things might have to wait to complete, such as, perhaps, searching for a Wikipedia article.</li><li>Asynchronous programming is safe. &nbsp;With &#8220;lower-level&#8221; implementations, it&#8217;s very easy to screw up, and your software, although perhaps faster, will be prone to crashing or generating erroneous results.</li></ul><br />Without further ado, let me introduce you to BuddyChat! &nbsp;It&#8217;s ugly and it&#8217;s silly, but it&#8217;s educational. &nbsp;For people who want to see it on github.com, it&#8217;s publicly available here:<br /><br /><a href="https://github.com/sdanzig/buddychat">https://github.com/sdanzig/buddychat</a><br /><br />And here&#8217;s a sample test run:<br /><br /><br /><script src="https://gist.github.com/sdanzig/5894101.js"></script> <br /><h3>Description</h3><br />The &#8220;gist&#8221; of this is that you&#8217;re participating in a chatroom. &nbsp;You run BuddyChat. &nbsp;BuddyChat creates the manager of the chat. &nbsp;This manager will create all the participants, both automated and human. &nbsp;The one human participant it creates represents you and will provide you an interface to make it speak in the chat room. &nbsp;Whenever a participant speaks, the message goes to the chat manager who forwards the message on to the other participants.<br /><br />There are a couple other little features I&#8217;ll describe later, but that&#8217;s the brunt of it. &nbsp;Here&#8217;s a diagram showing this:<br /><div class="separator" style="clear: both; text-align: center;"></div><div class="separator" style="clear: both; text-align: center;"><a href="http://4.bp.blogspot.com/-lhU_VH12UR8/Ud-nRd254QI/AAAAAAAACdM/G-WBqgSiy6Q/s1600/Blank+Flowchart+-+BuddyChat+Diagram+(2).png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="http://4.bp.blogspot.com/-lhU_VH12UR8/Ud-nRd254QI/AAAAAAAACdM/G-WBqgSiy6Q/s1600/Blank+Flowchart+-+BuddyChat+Diagram+(2).png" /></a></div>Aside from the slightly different names, and a couple of the messages, it&#8217;s exactly as described. &nbsp;The arrows represent both the actual construction of the objects, and also sending messages between them.<br /><br /><br /><h3>Construction</h3><br /><ol><li>The <b>BuddyChat</b> object is automatically created when the application is run.</li><li>The BuddyChat object builds <b>ChatManager</b>.</li><li>ChatManager builds the three <b>BuddyActor</b>s (the automated chat participants)</li><li>ChatManager builds <b>UserActor</b>.</li><li>UserActor builds <b>ConsoleActor</b>, which accepts input from you.</li></ol><br /><h3>Messaging</h3><br /><ol><li>BuddyChat starts off ChatManager with a <b>CreateChat</b> message.</li><li>ChatManager receives CreateChat, then constructs the participants.</li><li>ChatManager starts off all participants with a <b>Begin</b> message, which all but UserActor ignores.</li><li>UserActor starts off ConsoleActor with an <b>EnableConsole</b> message.</li><li>ConsoleActor sends each line of text you type as a <b>MessageFromConsole</b> message to UserActor.</li><li>UserActor will send this text in a <b>Speak</b> message to the ChatManager.</li><li>ChatManager will record the Speak message to its history, then forward it onto the BuddyActors.</li><li>In response, each BuddyActor generates and sends a new Speak message to ChatManager.</li><li>ChatManager will record each Speak message to its history, then forward them to the other participants. The BuddyActors will see the new messages are not from a human and will ignore them. The UserActor prints out the message to the screen.</li></ol><br />There are also other messages UserActor can send ChatManager:<br /><br /><ul><li><b>KillChat</b> - Shut down the chat application. &nbsp;Generated when UserActor receives &#8220;done&#8221;.</li><li><b>StopChat</b> - ChatManager will clear its chat history and stop accepting Speak messages. &nbsp;Generated when UserActor receives &#8220;stop&#8221;.</li><li><b>StartChat</b> - ChatManager will resume accepting Speak messages. Generated when UserActor receives &#8220;start&#8221;.</li></ul><br /><h3>ChatManager&#8217;s Finite State Machine (FSM)</h3><br />I love finite state machines. &nbsp;Let me explain what it is:<br /><br /><blockquote class="tr_bq">Something can be in just one out of a set of states. &nbsp;When in a particular state, it behaves a particular way. When a particular condition is met, it can transition to a different state.</blockquote><br />That&#8217;s it. &nbsp;They make it very easy to model potentially complex software. &nbsp;Just think of what your possible states are, and what it takes to get from one state to another. &nbsp;I implemented ChatManager as a finite state machine. &nbsp;The states it can be in are:<br /><br /><ul><li>ChatOffline</li><li>ChatOnline</li></ul><br />By default, ChatManager is in the ChatOffline state. &nbsp;Upon receiving the CreateChat message, it transitions to the ChatOnline state. &nbsp;Receiving StopChat and StartChat messages will cause ChatManager to transition to ChatOffline and ChatOnline, respectively, if not already in the target state.<br /><br />Given this, there&#8217;s a negligible hiccup that occurs because, in response to a CreateChat message. &nbsp;ChatManager will create a UserActor, then can send it a Begin message just before transitioning to ChatOnline. &nbsp;What this means is, for a very short but existent period of time, the UserActor can send a Speak message while the state is still ChatOffline, which would consequently get ignored. &nbsp;Akka provides you a way to specify something to occur during a particular transition. &nbsp;In this case, ChatManager sends out the Begin message on the transition from ChatOffline to ChatOffline.<br /><br /><br /><h3>Finite State Machine Data</h3><br />Okay, I lied, there&#8217;s one more complexity to at least Akka&#8217;s version of FSM, which I used. &nbsp;Akka works very cleanly if you adhere to the design and don&#8217;t use anything that&#8217;s &#8220;shared&#8221;. &nbsp;By this, I mean you&#8217;re not supposed to let things write information/data to the same place at the same time, or even read the same data if it could change at any point. &nbsp;The way Akka actors (which all those Actors mentioned before, plus ChatManager are) can safely communicate are through messages. &nbsp;Just like the Begin message wasn&#8217;t sent out until in the ChatOnline state, it&#8217;s possible to also ensure that a piece of data changes at the same time the state changes. &nbsp;ChatManager uses this data-handling to manage its list of chat participants, and the chat history.<br /><br /><br /><h3>The Code</h3><div><br />The source code for BuddyChat is available at:</div><div><br /><a href="https://github.com/sdanzig/buddychat">https://github.com/sdanzig/buddychat</a><br /><br /></div><div>To start, we&#8217;ll look at the first thing that does something&#8230;<br /><br /><h4>The BuddyChat Object</h4><br />The first line shows how, in Akka, an actor is created. &nbsp;&#8220;manager&#8221; is a unique name you can use to refer to the actor later. &nbsp;It&#8217;s not meant to look pretty, and adheres to a number of restrictions, such as having no spaces, but I use it for display purposes in this demo so I don&#8217;t have to bother with storing a more visually appealing name. &nbsp;The second line is sending a basic message to ChatManager, to tell it to get things started. &nbsp;It&#8217;s quite possible to send just Strings as messages, such as:</div><div><br /><pre>manager ! "create chat"</pre><br />However, by having a specific message class &#8220;CreateChat&#8221;, the compiler can warn you about typos.<br /><br /><h4>ChatManager</h4><br />ChatManager starts off as follows:<br /><br /><script src="https://gist.github.com/sdanzig/5895406.js"></script> ChatManager inherits the functionality of Akka&#8217;s Actor, and it&#8217;s given the FSM trait, which allows it to operate as a finite state machine. &nbsp;The number of automated participants is controlled by this hard-coded constant. &nbsp;ChatManager is initialized as being in the ChatOffline state, and with no users and no chat history. &nbsp;Not even empty lists, which is why it&#8217;s simply Uninitialized.<br /><br />Akka&#8217;s structure for handling messages when in a state is quite intuitive. &nbsp;It follows the paradigm: &#8220;When in state A, handle messages of type 1 this way and messages of type 2 that way.&#8221; &nbsp;See ChatManager&#8217;s logic in the ChatOffline state:<br /><br /><script src="https://gist.github.com/sdanzig/5895581.js"></script> As you can see, when offline, ChatManager can handle a CreateChat message and a StartChat message. &nbsp;I won&#8217;t dive too much into how case classes work in Scala, but I will point out that you don&#8217;t just see &#8220;case CreateChat&#8221; here. &nbsp;You see &#8220;case Event(some message type, some state data)&#8221;. &nbsp;This is being used not only to respond to a particular incoming message, but also to read in the state data. &nbsp;It&#8217;s possible to also have it respond to a message type differently depending on what your data is. &nbsp;In this case, we know we only want to respond to CreateChat messages when the data is Uninitialized, so we specify this. &nbsp;This ensures that if we erroneously get a CreateChat message after the chat has been created, the message will be ignored, because although the message type matches CreateChat, the state data does not match Uninitialized.<br /><br />Upon reception of CreateChat, ChatManager instantiates the sole UserActor, named &#8220;user&#8221;, and the three BuddyActors. &nbsp;The combination of the two,<br /><br /><pre>user :: list</pre><br />becomes the new state data upon transitioning (going to) the ChatOnline state. &nbsp;CreateChat is one message, when there is no state data, that can provoke this transition. &nbsp;The other is StartChat, but only if the chat participants are already created. &nbsp;That stipulation is reflected by ChatData(chatters, _). &nbsp;The underscore is a placeholder for the chat history, used to convey indifference to what, if any, chat history exists. &nbsp;Checking the list of chatters alone is sufficient to ensure StartChat is processed only when it should be. &nbsp;Upon processing a StartChat message, ChatManager will transition to the ChatOnline state, retaining the list of chatters, and creating a new, empty chat history (List[String]()).<br /><br />As mentioned before, ChatManager has some logic for immediately after transitioning from offline to online, to avoid the window of time when a UserActor can send a Speak message when ChatManager is still offline (and thus being ignored):<br /><br /><script src="https://gist.github.com/sdanzig/5895744.js"></script> While the automated BuddyActors ultimately ignore the Begin message, because they only send messages in response to the user anyway, the UserActor, upon receiving a Begin message, will instruct the ConsoleActor to start receiving keyboard input. &nbsp;One more quirk here. &nbsp;This part:<br /><br /><pre>(Uninitialized, ChatData(chatters, _)) &lt;- Some(stateData,nextStateData)</pre></div><div><br /></div><div>What that is doing is ensuring the Begin message is only sent out when the chat participants are first created. &nbsp;The state data goes from completely uninitialized to existing state data complete with a list of chatters. &nbsp;If the change in state data doesn&#8217;t match that, then nothing happens during the transition.<br /><br />While in the ChatOnline state, ChatManager uses this message handling logic:<br /><br /><script src="https://gist.github.com/sdanzig/5896431.js"></script> <br />In this state, ChatManager can now accept Speak messages. &nbsp;Upon receiving a Speak message, ChatManager will forward the message to all chat participants except (different from) the sender, which is where the &#8220;diff&#8221; is applied. &nbsp;&#8220;forward&#8221; is used to re-send the messages rather than the typical ! because forward will send the message as if it were from the same &#8220;sender&#8221;. &nbsp;Akka allows you to, upon receiving a message, access the sender of that message, and if ChatManager used !, it would appear that ChatManager originated the message. &nbsp;This allows the message receiver to handle a message in a different way based on who sent it.<br /><br />When writing BuddyChat, I initially allowed BuddyActor to respond to all incoming messages, but ultimately the problem arose where all the BuddyActors responded to other BuddyActors repeatedly and endlessly. &nbsp;By only responding to messages where the sender has the name &#8220;user&#8221;, the BuddyActor is assured to avoid this issue.<br /><br />Note Speak does not cause a transition. &nbsp;ChatManager will &#8220;stay&#8221; at its current state. &nbsp;However, it uses updated state data (ChatData) which has a chat history that includes the new message.<br /><br />ChatManager also can receive a StopChat method while in ChatOnline state. &nbsp;This will cause ChatManager to go to &#8220;ChatOffline&#8221; state, and while the list of chatters are preserved in the new ChatData, the chat history is replaced by an empty list of messages.<br /><br />When there is no case that matches the message in the handler for the particular state, the message is dealt with in the whenUnhandled block:<br /><br /><script src="https://gist.github.com/sdanzig/5897455.js"></script> In either state, ChatManager should be able to handle the KillChat message, so it makes sense to receive it here. &nbsp;While whenUnhandled certainly can deal with messages that are unexpected in the current state, the fall-through logic that leads messages to whenUnhandled makes it a perfect place to handle messages that are treated the <b>same</b> in <b>any</b> state. &nbsp;ChatManager does not have to clean up any resources upon shutdown, so it can call context.system.shutdown to end the application immediately. &nbsp;Just for demonstration&#8217;s sake, ChatManager prints out the entire chat history first, summarizing who said what. &nbsp;Note that when ChatManager stores text from Speak messages, it prepends the name of the actor that generated the message.<br /><br />If a message is actually unexpected, there is a catch-all handler that will log the message with current state data as a warning, but otherwise do nothing.<br /><br /><h4>UserActor</h4><br />A UserActor is constructed by ChatManager when it receives a CreateChat message. &nbsp;Upon creation, the UserActor will create a ConsoleActor. &nbsp;Very soon after UserActor is created, ChatManager will enter ChatOnline state then pass it a Begin message. &nbsp;UserActor is not a finite state machine. &nbsp;It will respond to the same set of messages the same way no matter the circumstances. &nbsp;The messages are handled by UserActor&#8217;s receive method:<br /><br /><script src="https://gist.github.com/sdanzig/5897510.js"></script> Upon receiving a Begin message, UserActor sends an EnableConsole message to ConsoleActor it created. &nbsp;If the UserActor tried to wait for user input directly (which I initially tried to do), it would not be able to receive any further messages. &nbsp;Why is this?<br /><blockquote class="tr_bq">An actor in Akka has a message queue which is processed one message at a time. &nbsp;Waiting for keyboard input is a &#8220;blocking&#8221; operation, which means that execution ceases until keyboard input is received. &nbsp;Because you need to repeatedly wait for the next line of input in a loop, the Begin message handler would never exit. &nbsp;It would just repeatedly end up waiting for keyboard input.</blockquote>The solution is to let ConsoleActor handle it. &nbsp;If ConsoleActor receives one message and then endlessly waits for user input, this is okay, because it&#8217;s running in another &#8220;thread of execution&#8221;.<br /><br />UserActor, after enabling the console input, will wait for an incoming MessageFromConsole. &nbsp;If the text encapsulated by this message is one of the following, there is special handling:<br /><br /><ul><li>&#8220;done&#8221; - Upon receiving this, UserActor will send ChatManager a KillChat message to shut down the chat system.</li><li>&#8220;stop&#8221; - UserActor will send ChatManager a StopChat message to disable the chatting and clear the chat history.</li><li>&#8220;start&#8221; - UserActor will send ChatManager a StartChat message to re-enable chatting.</li></ul><br />If the text does not match any of those, UserActor will encapsulate the text in a Speak message and send it to ChatManager, allowing the user to communicate with the other chat participants.<br /><br />From the ChatManager, UserActor can receive Speak messages which would have originated from other chat participants (BuddyActors) and then been forwarded by ChatManager. &nbsp;Because the Speak message &nbsp;was forwarded rather than resent, the sender is the actor that generated the message, not the ChatManager that directly sent it to the UserActor. &nbsp;This allows the UserActor to pull out the originator&#8217;s name to identify the sender of the message for display purposes (labeledText).<br /><br />There&#8217;s one more nifty thing to mention about this &#8220;matching&#8221; methodology in receive. &nbsp;Later you&#8217;ll see the declaration of the messages that are passed around between actors. &nbsp;If all of the messages that an actor can receive have a &#8220;sealed trait&#8221;, then whenever you are handling a message with this trait, Scala can confirm that you have handled every possible message that has this trait. &nbsp;This is called &#8220;checking for completeness&#8221; in a pattern match.<br /><br /><h4>ConsoleActor</h4></div><div><br />ConsoleActor&#8217;s sole purpose is to accept input from the keyboard and send it to the UserActor in a MessageFromConsole message.</div><div><br /></div><div><script src="https://gist.github.com/sdanzig/5897617.js"></script></div><div>It receives one message, EnableConsole, and then displays instructions enters the loop that accepts lines of input from the keyboard. &nbsp;For each line, a MessageFromConsole message is sent to the UserActor, which ConsoleActor identifies as its &#8220;parent&#8221;, since UserActor created it. &nbsp;The only thing that can exit this loop, is when &#8220;done&#8221; is typed. &nbsp;That fancy getLines.takeWhile is generating a &#8220;stream&#8221;, which is a feature in Scala.<br /><br /><i><span style="font-size: x-small;">A stream can be iterated over just like a list, and each element is generated on the fly. &nbsp;The takeWhile, upon detecting a value that doesn&#8217;t meet a condition, will make the for loop think it&#8217;s just reached the end of the list, instead of processing the nonconforming value from the stream.</span></i><br /><i><span style="font-size: x-small;"><br /></span></i>After the loop has terminated, &#8220;done&#8221; is sent to UserActor to shut down the chat.<br /><br /><h4>BuddyActor</h4><br />BuddyActor&#8217;s sole purpose is to respond to messages from UserActor.<br /><br /><script src="https://gist.github.com/sdanzig/5897827.js"></script> testJust to make BuddyActor interchangeable with a fully functional UserActor, BuddyActor handles all the messages that a ChatManager might send to any other chat participant, such as UserActor: &nbsp;Speak and Begin, although it will ignore the Begin message. &nbsp;In the Speak message handler, the message is also ignored if the sender&#8217;s name is not &#8220;user&#8221;. &nbsp;This prevents a BuddyActor from endlessly conversing with another BuddyActor. &nbsp;When responding to a Speak message, BuddyActor will randomly generate one of three silly responses, including the text from the received message in the reply. &nbsp;This inclusion is mainly to prove that BuddyActor is successfully receiving the forwarded message from the UserActor.<br /><br />The random number generator, &#8220;rand&#8221;, uses a &#8220;seed&#8221; that is affected by the current time in milliseconds along with the &#8220;path&#8221; of the actor, which must be unique amongst actors. &nbsp;Without a random number seed, the random number generator would generate the same sequence of numbers.<br /><br /><h4>Messages</h4><br />The messages passed between actors are defined as follows:<br /><br /><script src="https://gist.github.com/sdanzig/5898494.js"></script> The messages are given traits such that all possible messages an actor can receive share a common trait. If you accidentally remove the handling for a message in that set, the Scala compiler will warn you. &nbsp;The &#8220;sealed&#8221; keyword means that all the possible classes that use that sealed trait are in the same file. &nbsp;This allows the programmer to guarantee that all messages which use the trait are accounted for.<br /><br />There are two subtleties used here while defining these traits:<br /><br /><br /><ul><li>A message class can have more than one trait. &nbsp;The Speak message is a ChatParticipantSystemMessage and a ChatManagementSystemMessage. &nbsp;That means, respectively, that it&#8217;s one of the messages that a chatter can receive, and also one of the messages that ChatManager handles.</li><li>A trait can have another trait. &nbsp;By saying that a ChatParticipantSystemMessage has the UserSystemMessage, you&#8217;re saying that the set of messages with the UserSystemMessage trait is equal to or greater than the set of messages with the ChatParticipantSystemMessage trait. &nbsp;Any message with the ChatParticipantSystemMessage trait also has the UserSystemMessage trait, so the set of user system messages are at least that set, and perhaps more. &nbsp;In this case, there&#8217;s one additional message that a UserActor can receive that the other chatters (the BuddyActors) can&#8217;t receive. &nbsp;The MessageFromConsole is from ConsoleActor. &nbsp;ConsoleActor only communicates with UserActor, so this makes sense.</li></ul><br /><br /><h3>Conclusion</h3><br />The BuddyChat system certainly is only meant to serve educational purposes. &nbsp;However, it demonstrates many very useful technologies within both Akka, and Scala as well. &nbsp;Programmers no longer need to fear multi-threaded programming as long as they properly use an actor system such as provided by Akka. &nbsp;Akka&#8217;s FSM can simplify the implementation of a complex system by grouping its behaviors by its possible states. &nbsp;While the significant overhead of the actor framework is not suitable for applications requiring maximum performance (such as handling billions of tweets or time-sensitive stock ticker updates), in which case lower-level handling of parallel execution is recommended, Akka actors are amazingly easy to deal with and should be used otherwise.<br /><br /><br /><h3>Notes</h3><br />I&#8217;m unsure if there&#8217;s a way to do some form of completeness checking in the FSM handlers. &nbsp;I&#8217;d guess not, but please let me know if there&#8217;s a way.<br />I tried implementing the check for the name &#8220;user&#8221; as a guard in the pattern match:<br /><br /><pre>case Speak(msg) if "user".equals(sender.path.name)</pre><br />I had a case Speak(msg) after that to catch the other Speak messages and ignore them. &nbsp;However, this disabled the completeness checking. &nbsp;I saw in older versions of Scala that guards were handled improperly and this had been fixed, but perhaps the change was reverted, or, more likely, I&#8217;m doing something wrong.</div><div><br /></div></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Scott Danzig</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-30T00:00:00-04:00" pubdate data-updated="true">Jun 30<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/actor/'>actor</a>, <a class='category' href='/blog/categories/akka/'>akka</a>, <a class='category' href='/blog/categories/asynchronous-programming/'>asynchronous programming</a>, <a class='category' href='/blog/categories/chat/'>chat</a>, <a class='category' href='/blog/categories/finite-state-machine/'>finite state machine</a>, <a class='category' href='/blog/categories/fsm/'>fsm</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sdanzig.github.io/blog/2013/06/30/buddychat-simple-example-of-akka-actors/" data-via="" data-counturl="http://sdanzig.github.io/blog/2013/06/30/buddychat-simple-example-of-akka-actors/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/27/the-optimization-of-javas-hashmap/" title="Previous Post: The Optimization of Java's HashMap class">&laquo; The Optimization of Java's HashMap class</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/07/07/introduction-to-git-along-with-sensible/" title="Next Post: Introduction to Git Along with a Sensible Git Workflow">Introduction to Git Along with a Sensible Git Workflow &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/29/do-you-care-if-people-understand-you/">Do You Care if People Understand You?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/07/introduction-to-git-along-with-sensible/">Introduction to Git Along With a Sensible Git Workflow</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/30/buddychat-simple-example-of-akka-actors/">BuddyChat, a Simple Example of Akka Actors With an Akka FSM</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/27/the-optimization-of-javas-hashmap/">The Optimization of Java's HashMap Class</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/17/the-option-design-pattern/">The Option Design Pattern</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Scott Danzig -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

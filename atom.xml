@@ -4,7 +4,7 @@
   <title><![CDATA[The Programmer's Probe]]></title>
   <link href="http://sdanzig.github.io/atom.xml" rel="self"/>
   <link href="http://sdanzig.github.io/"/>
-  <updated>2013-08-07T22:17:33-04:00</updated>
+  <updated>2013-08-07T22:20:24-04:00</updated>
   <id>http://sdanzig.github.io/</id>
   <author>
     <name><![CDATA[Scott Danzig]]></name>
@@ -74,25 +74,6 @@ Yesterday I was on Quora.com sifting through some Q&amp;A and I ran across someo
     <id>http://sdanzig.github.io/blog/2013/06/17/self-introduction</id>
     <content type="html"><![CDATA[<div class='post'>
 Hello internet people,<br />I&#8217;ve been a computer programmer since my parents bought me an Apple IIc when I was 7. &nbsp;I&#8217;m 36 now, and my path in life, since then, went like this:<br /><ul><li><strong>ProDOS BASIC</strong>, for choose your own adventure games on the Apple IIc</li><li><strong>Labview for Windows</strong>, at an AT&amp;T Bell Labs internship</li><li><strong>MudOS LPC</strong>, when I ran my own MUD</li><li><strong>Java</strong>, for developing a legend of Zelda-like game for Software Engineering class</li><li><strong>Perl</strong>, for an AT&amp;T e-billing system</li><li><strong>Perl</strong>, <strong>PL/SQL</strong> and <strong>Java</strong>, for the backend functionality at Register.com</li><li><strong>J2EE</strong>, for enterprise-networking software at Avaya</li><li><strong>C</strong>, <strong>Java</strong>, <strong>Visual C++</strong>, and <strong>C#</strong>, for simulation software at CSC</li><li>Visual C++ and Java, for operational awareness software at Viecore FSD and then Future Skies</li><li><strong>Java</strong> and <strong>C</strong>, for flight simulation software at MIT Lincoln Laboratory</li><li><strong>Javascript</strong>/<strong>CSS</strong> for front end and <strong>Java</strong> with <strong>Spring</strong> for backend, transferring and accessing broadcast video at Reuters</li><li><strong>Python</strong>, <strong>Flex</strong>/<strong>Actionscript</strong>, and <strong>Java</strong>, for portfolio accounting software at Hedgeserv</li><li><strong>Scala</strong>, <strong>Java</strong>, <strong>Python</strong>, and <strong>Objective C</strong>, for web and mobile publishing at New York Magazine</li></ul>At this point in my career, I have three main interests that serve as the motivation for this blog:<br /><ul><li>I am invigorated by the recent push in the world of software development toward <strong>functional</strong>, <strong>non-blocking programming</strong>. &nbsp;In particular, I&#8217;ve absolutely loved learning about <strong>Scala</strong> recently, and plan to work towards greater expertise leveraging its capabilities.</li><li>I have become more attuned to the need for adherence to established <strong>design patterns</strong>, and want to better familiarize myself with them, in an effort to better exploit their capabilities given an opportunity.</li><li>It is difficult to stay abreast of all immediately-relevant <strong>open source technologies</strong>. &nbsp;For nearly any challenge that exists in programming, I&#8217;ve found that someone has developed some sort of solution that will at least partially alleviate its inherent difficulties.</li></ul>So, in general, that&#8217;s what I&#8217;ll be posting about. &nbsp;Nice to make your acquaintance, don&#8217;t be a stranger, and feel free to point out anything I wrote that you think is good, bad, right, wrong, misguided or silly.<br />Thanks for reading!</div>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Intro]]></title>
-    <link href="http://sdanzig.github.io/blog/2012/07/22/intro/"/>
-    <updated>2012-07-22T08:23:00-04:00</updated>
-    <id>http://sdanzig.github.io/blog/2012/07/22/intro</id>
-    <content type="html"><![CDATA[<p>Testing!</p>
-
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sollicitudin, massa eu vestibulum laoreet, nibh ante vulputate lorem, ac lobortis ante tellus eu mi. Duis sem nisi, luctus at feugiat eget, fringilla ut tellus. Nam a molestie justo. Sed pulvinar est vitae tellus semper tincidunt. Fusce euismod luctus lacus nec placerat. Mauris rutrum scelerisque nulla ut tempor. Nunc porttitor posuere mi, aliquet vehicula lorem feugiat in. Ut ut fermentum risus. Aliquam tincidunt ultricies ante sit amet bibendum. Cras nec sapien odio. Duis posuere congue sem, at congue massa faucibus at.</p>
-
-<p>Integer ut sapien eget nisl auctor faucibus ut fermentum arcu. Nunc rutrum urna non risus congue et tristique felis eleifend. Maecenas blandit est eu mauris aliquam aliquet. Quisque porttitor enim eget risus blandit in mollis orci eleifend. Nam malesuada nulla sed lacus elementum placerat accumsan arcu rhoncus. Phasellus feugiat cursus turpis nec facilisis. Duis eget metus arcu, eget commodo velit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer cursus vulputate enim, vel gravida velit faucibus et. Ut a urna vitae tellus cursus rhoncus. Maecenas at odio eget quam cursus elementum. Aliquam vitae eros quis tellus laoreet accumsan sed id lorem. Suspendisse et rutrum leo. Integer scelerisque vestibulum adipiscing. In posuere, libero ac accumsan suscipit, nulla ligula gravida erat, ut tempor odio erat nec sem. Quisque justo ipsum, adipiscing volutpat varius vitae, blandit eget nisi.</p>
-
-<p>Nullam adipiscing neque ac lacus commodo vitae imperdiet dui sollicitudin. Ut ac nunc augue. Nam at sem ut quam commodo aliquet vitae vitae dui. Vivamus scelerisque felis eget dolor cursus feugiat. Phasellus at dui sed lectus scelerisque pretium. Etiam nec massa ut justo vestibulum fringilla ac vitae urna. Morbi tortor erat, tempus sed consectetur at, elementum nec eros. Vivamus mattis arcu a sapien semper non lacinia eros pretium.</p>
-
-<p>Proin ut hendrerit arcu. Maecenas ullamcorper tristique magna vel mattis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam tincidunt euismod viverra. In sit amet neque turpis. Suspendisse ac sapien mi, id blandit purus. Ut tortor turpis, rutrum ac tempor at, accumsan sit amet erat. Etiam ultricies eleifend dolor, eget tempus justo tristique vitae. In hac habitasse platea dictumst. Aliquam eu enim neque.</p>
-
-<p>Morbi massa lorem, viverra non dictum at, malesuada vel nibh. Nam fermentum lobortis varius. Sed a nulla lacus, quis posuere risus. Nunc id urna libero, quis rutrum mi. In gravida felis urna. Praesent nec dolor ac urna tempor fermentum. Curabitur rutrum arcu et lorem volutpat viverra.</p>
 ]]></content>
   </entry>
   

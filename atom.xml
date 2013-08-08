@@ -4,7 +4,7 @@
   <title><![CDATA[The Programmer's Probe]]></title>
   <link href="http://sdanzig.github.io/atom.xml" rel="self"/>
   <link href="http://sdanzig.github.io/"/>
-  <updated>2013-08-07T09:00:57-04:00</updated>
+  <updated>2013-08-07T22:17:33-04:00</updated>
   <id>http://sdanzig.github.io/</id>
   <author>
     <name><![CDATA[Scott Danzig]]></name>
@@ -74,38 +74,6 @@ Yesterday I was on Quora.com sifting through some Q&amp;A and I ran across someo
     <id>http://sdanzig.github.io/blog/2013/06/17/self-introduction</id>
     <content type="html"><![CDATA[<div class='post'>
 Hello internet people,<br />I&#8217;ve been a computer programmer since my parents bought me an Apple IIc when I was 7. &nbsp;I&#8217;m 36 now, and my path in life, since then, went like this:<br /><ul><li><strong>ProDOS BASIC</strong>, for choose your own adventure games on the Apple IIc</li><li><strong>Labview for Windows</strong>, at an AT&amp;T Bell Labs internship</li><li><strong>MudOS LPC</strong>, when I ran my own MUD</li><li><strong>Java</strong>, for developing a legend of Zelda-like game for Software Engineering class</li><li><strong>Perl</strong>, for an AT&amp;T e-billing system</li><li><strong>Perl</strong>, <strong>PL/SQL</strong> and <strong>Java</strong>, for the backend functionality at Register.com</li><li><strong>J2EE</strong>, for enterprise-networking software at Avaya</li><li><strong>C</strong>, <strong>Java</strong>, <strong>Visual C++</strong>, and <strong>C#</strong>, for simulation software at CSC</li><li>Visual C++ and Java, for operational awareness software at Viecore FSD and then Future Skies</li><li><strong>Java</strong> and <strong>C</strong>, for flight simulation software at MIT Lincoln Laboratory</li><li><strong>Javascript</strong>/<strong>CSS</strong> for front end and <strong>Java</strong> with <strong>Spring</strong> for backend, transferring and accessing broadcast video at Reuters</li><li><strong>Python</strong>, <strong>Flex</strong>/<strong>Actionscript</strong>, and <strong>Java</strong>, for portfolio accounting software at Hedgeserv</li><li><strong>Scala</strong>, <strong>Java</strong>, <strong>Python</strong>, and <strong>Objective C</strong>, for web and mobile publishing at New York Magazine</li></ul>At this point in my career, I have three main interests that serve as the motivation for this blog:<br /><ul><li>I am invigorated by the recent push in the world of software development toward <strong>functional</strong>, <strong>non-blocking programming</strong>. &nbsp;In particular, I&#8217;ve absolutely loved learning about <strong>Scala</strong> recently, and plan to work towards greater expertise leveraging its capabilities.</li><li>I have become more attuned to the need for adherence to established <strong>design patterns</strong>, and want to better familiarize myself with them, in an effort to better exploit their capabilities given an opportunity.</li><li>It is difficult to stay abreast of all immediately-relevant <strong>open source technologies</strong>. &nbsp;For nearly any challenge that exists in programming, I&#8217;ve found that someone has developed some sort of solution that will at least partially alleviate its inherent difficulties.</li></ul>So, in general, that&#8217;s what I&#8217;ll be posting about. &nbsp;Nice to make your acquaintance, don&#8217;t be a stranger, and feel free to point out anything I wrote that you think is good, bad, right, wrong, misguided or silly.<br />Thanks for reading!</div>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The problem with Pingdom]]></title>
-    <link href="http://sdanzig.github.io/blog/2012/07/22/the-problem-with-pingdom/"/>
-    <updated>2012-07-22T19:13:00-04:00</updated>
-    <id>http://sdanzig.github.io/blog/2012/07/22/the-problem-with-pingdom</id>
-    <content type="html"><![CDATA[
-
-<figure class='code'><figcaption><span>Time to be Awesome - awesome.rb </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='rb'><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Awesome!&quot;</span> <span class="k">unless</span> <span class="n">lame</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="http://www.pingdom.com%20Pingdom">The problem with pingdom.</a></p>
-
-<p>My money&rsquo;s in that office, right? If she start giving me some bullshit about it ain&rsquo;t there, and we got to go someplace else and get it, I&rsquo;m gonna shoot you in the head then and there. Then I&rsquo;m gonna shoot that bitch in the kneecaps, find out where my goddamn money is. She gonna tell me too. Hey, look at me when I&rsquo;m talking to you, motherfucker. You listen: we go in there, and that nigga Winston or anybody else is in there, you the first motherfucker to get shot. You understand?</p>
-
-<blockquote><p>Blockquote is what goes
-inside this block here
-would you believe that
-bullshit?</p></blockquote>
-
-<p>Well, the way they make shows is, they make one show. That show&rsquo;s called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they&rsquo;re going to make more shows. Some pilots get picked and become television programs. Some don&rsquo;t, become nothing. She starred in one of the ones that became nothing.</p>
-
-<p>The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men. Blessed is he who, in the name of charity and good will, shepherds the weak through the valley of darkness, for he is truly his brother&rsquo;s keeper and the finder of lost children. And I will strike down upon thee with great vengeance and furious anger those who would attempt to poison and destroy My brothers. And you will know My name is the Lord when I lay My vengeance upon thee.</p>
-
-<p>Your bones don&rsquo;t break, mine do. That&rsquo;s clear. Your cells react to bacteria and viruses differently than mine. You don&rsquo;t get sick, I do. That&rsquo;s also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We&rsquo;re on the same curve, just on opposite ends.</p>
-
-<p>Do you see any Teletubbies in here? Do you see a slender plastic tag clipped to my shirt with my name printed on it? Do you see a little Asian child with a blank expression on his face sitting outside on a mechanical helicopter that shakes when you put quarters in it? No? Well, that&rsquo;s what you see at a toy store. And you must think you&rsquo;re in a toy store, because you&rsquo;re here shopping for an infant named Jeb.</p>
 ]]></content>
   </entry>
   
